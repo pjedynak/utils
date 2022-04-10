@@ -1,0 +1,4 @@
+# camera
+
+ACTION=="change", SUBSYSTEM=="drm", TAG+="monitor_hotplug"
+TAG=="monitor_hotplug", RUN+="/usr/local/bin/monitor_hotplug"

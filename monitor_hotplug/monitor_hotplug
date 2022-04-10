@@ -1,0 +1,24 @@
+#!/bin/bash
+
+export DISPLAY=:0
+
+USER=$(who | grep "${DISPLAY}" | cut -f 1 -d \t | xargs)
+if [ "${USER}" == "" ]; then
+    exit 0
+fi
+
+export XAUTHORITY=/home/"${USER}"/.Xauthority
+
+INTERNAL=$(xrandr -q | grep eDP-1 | cut -f 1 -d " ")
+EXTERNALS=$(xrandr -q | grep " connected " | cut -f 1 -d " " | grep -v "${INTERNAL}")
+
+for e in ${EXTERNALS}; do
+    xrandr --output "${e}" --auto
+done
+
+if [ "${EXTERNALS}" != "" ]; then
+    xrandr --output "${INTERNAL}" --off
+else
+    xrandr --output "${INTERNAL}" --auto
+fi
+
